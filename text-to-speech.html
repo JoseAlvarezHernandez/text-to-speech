@@ -1,0 +1,147 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<dom-module id="text-to-speech">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .card {
+        width: 100%;
+        background-color: rgb(180, 241, 226);
+        min-height: 100px;
+      }
+
+      .speak {
+        float: left;
+      }
+
+      .record {
+        float: right;
+      }
+
+      .myText {
+        position: relative;
+        padding: 5px 20px;
+        text-align: justify
+      }
+
+      .buttons-container {
+        width: 100%;
+        min-height: 50px;
+      }
+    </style>
+    <div class="card">
+      <div class="buttons-container">
+        <paper-button on-tap="_textTospeech" class="speak">[[listenTest]]</paper-button>
+        <paper-button on-tap="_speechToText" class="record">
+          [[recordingText]]
+        </paper-button>
+      </div>
+      <p class="myText">[[text]]</p>
+    </div>
+
+  </template>
+
+  <script>
+    class TextTospeech extends Polymer.Element {
+      static get is() { return 'text-to-speech'; }
+      static get properties() {
+        return {
+          text: {
+            type: String,
+            value: () => '',
+            reflectToAttribute: true
+          },
+          listenTest: {
+            type: String,
+            value: 'Escuchar'
+          },
+          recordingText: {
+            type: String,
+            value: 'Grabar'
+          },
+          recording: {
+            type: Boolean,
+            value: false
+          },
+          recognition: {
+            type: Object,
+            value: null
+          },
+          lang: {
+            type: String,
+            value: 'es-MX'
+          }
+        };
+      }
+      connectedCallback() {
+        super.connectedCallback();
+        let voices = speechSynthesis;
+        this.text = this.textContent;
+      }
+      _speechToText() {
+        if (!('webkitSpeechRecognition' in window)) {
+          upgrade();
+        } else {
+          if (this.recognition == null) {
+            this.recognition = new webkitSpeechRecognition();
+            this.recognition.continuous = true;
+            this.recognition.interimResults = true;
+            this.recognition.onstart = () => {
+              this.set('recordingText', 'Grabando...');
+            }
+            this.recognition.onresult = function (event) {
+              var interim_transcript = '';
+              this.final_transcript = '';
+              for (var i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                  this.final_transcript += event.results[i][0].transcript == undefined ? '' : event.results[i][0].transcript;
+                } else {
+                  interim_transcript += event.results[i][0].transcript;
+                }
+              }
+              this.final_transcript = this.final_transcript;
+              return true;
+            };
+            this.recognition.onend = (event) => {
+              this.set('recordingText', 'Grabar');
+              this.set('text', event.currentTarget.final_transcript);
+            }
+            this.recognition.lang = this.lang;
+          }
+
+          if (this.recording == false) {
+            this.set('recording', true);
+            this.recognition.start();
+          } else {
+            this.set('recording', false);
+            this.recognition.stop();
+          }
+        }
+      }
+      _textTospeech() {
+        let message = this._getMessageToSpeak();
+        speechSynthesis.speak(message);
+      }
+
+      _getMessageToSpeak() {
+        const speech = new SpeechSynthesisUtterance();
+        speech.rate = 1;
+        speech.pitch = 1;
+        speech.text = this.text;
+        speech.onstart = () => {
+          this.set('listenTest', 'Escuchando...');
+        };
+        speech.onend = (e) => {
+          this.set('listenTest', 'Escuchar');
+        };
+        return speech;
+      }
+    }
+
+    window.customElements.define(TextTospeech.is, TextTospeech);
+  </script>
+</dom-module>

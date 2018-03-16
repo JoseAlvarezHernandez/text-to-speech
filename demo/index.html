@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>text-to-speech demo</title>
+
+    <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../bower_components/iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../text-to-speech.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic text-to-speech demo</h3>
+      <demo-snippet>
+        <template>
+          <text-to-speech lang="es-MX">
+              Hecho en México no retornable consérvese en lugar fresco si el sello de la tapa roto no beber consume preferentemente antes de fecha tapa o en botella de agua natural pura
+          </text-to-speech>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>
