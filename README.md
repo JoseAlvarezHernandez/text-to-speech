@@ -1,4 +1,4 @@
-# \<text-to-speach\>
+# \<text-to-speech\>
 
 a new element in which you can read the text or you cand record
 
