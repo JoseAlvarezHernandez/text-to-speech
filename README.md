@@ -1,2 +1,21 @@
-# text-to-speech
-A web component made in Polymer that reads the text in the content and can do speech to text 
+# \<text-to-speach\>
+
+a new element in which you can read the text or you cand record
+
+## Install the Polymer-CLI
+
+First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
+
+## Viewing Your Element
+
+```
+$ polymer serve
+```
+
+## Running Tests
+
+```
+$ polymer test
+```
+
+Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
